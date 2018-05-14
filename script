@@ -1,0 +1,81 @@
+var config = {
+  var activeBot = false;
+  var typeWindowName = "window-tool";
+  var toolTypeName = "tool-type";
+  var areaToTypeIn = "tool-type-word";
+  var toolTypeForm = "tool-type-form";
+  var easyDict = ["bit", "net", "intel", "load", "xml", "join", "get", "emit", "ghost", "call", "handle", "part", "loop", "pass", "global", "data", "status", "add", "url", "write", "point", "user", "delete", "client", "port", "file", "right", "system", "list", "reset", "upload", "root", "remove", "event", "dir", "socket", "ping", "com", "size", "init", "send", "cookies", "buffer", "info", "set", "key", "count", "bytes", "num", "left", "poly", "type", "domain", "host", "temp", "log", "stat", "add", "http", "anon", "val", "signal"];
+  var mediumDict = ["length","eventtype", "filetype", "newserver", "encrypt", "sizeof", "download", "connect", "hexagon", "getfile", "listconfig", "accountname", "responder", "setport", "filedir", "generate", "thread", "getlog", "newhost", "package", "writefile", "username", "userport", "response", "urlcheck", "setnewid", "decrypt", "newline", "password", "setping", "vector", "mysql", "setstats", "number", "getpass", "decryptfile", "gridheight", "account", "loadbytes", "protocol", "export", "findpackage", "getping", "getid", "datatype", "module", "process", "proxy", "serverproxy", "channel", "syscall", "hostserver", "getinfo", "config", "getkey", "encryptfile", "constructor", "server", "gridwidth", "command", "fillgrid", "threat", "userid", "disconnect", "setcookie", "encode"];
+  var hardDict = ["checkhttptype","systemgridtype", "getxmlprotocol", "loadloggedpassword", "joinnetworkclient", "loadregisterlist", "encodenewfolder", "destroybatch", "tempdatapass", "disconnectchannel", "getfirewallchannel", "encryptunpackedbatch", "sendintelpass", "exportconfigpackage", "wordcounter", "bufferpingset", "decryptdatabatch", "disconnectserver", "createnewpackage", "create2axisvector", "dodecahedron", "emitconfiglist", "createnewsocket", "rootcookieset", "removenewcookie", "httpbuffersize", "create3axisvector", "systemportkey", "includedirectory", "uploaduserstats", "removeoldcookie", "patcheventlog", "getdatapassword", "ghostfilesystem", "changepassword", "blockthreat", "channelsetpackage", "loadaltevent", "generatecodepack", "getpartoffile", "eventlistdir", "hostnewserver", "unpacktmpfile", "batchallfiles", "mergesocket", "getmysqldomain", "setnewproxy", "deleteallids", "createfilethread", "statusofprocess", "respondertimeout", "sizeofhexagon", "fileexpresslog", "changeusername", "callmodule"];
+  var timeBetweenType = 1000;
+}
+function startTyping()
+{
+  if(document.getElementById(toolTypeName).children[0] != null)
+  {
+    var image = document.getElementById(toolTypeName).children[0];
+    var word = "";
+    var number = image.src.split("/").pop();
+    if(image.src.includes("/e", 0))
+    {
+        word = easyDict[number];
+    }
+    else if(image.src.includes("/m", 0))
+    {
+        word = mediumDict[number];
+    }
+    else if(image.src.includes("/h", 0))
+    {
+        word = hardDict[number];
+    }
+    else
+    {      
+      console.log("Input is over.");
+      return;
+    }
+    console.log("word("+ word +") url " + image.src);
+    var inputArea = document.getElementById(areaToTypeIn);
+    SendInput();
+    inputArea.value = word;
+    setTimeout(function() {SendInput()}, 500);
+  }
+  else
+  {
+    console.log("no words")
+  }
+}
+function SendInput()
+{
+      var event = new KeyboardEvent("keypress", {
+      view: window,
+      keyCode: 13,
+      bubbles: true,
+      cancelable: true
+    });
+
+document.querySelector("#tool-type-word").dispatchEvent(event);
+}
+function setOnLoadEvent()
+{
+    var element = document.getElementById(toolTypeName).children[0];
+    var config = {attributes: true, subtree: true}
+    var x = new MutationObserver(function(e) {
+      setTimeout(function() {startTyping()}, timeBetweenType);
+    })
+    x.observe(element, config);
+}
+function IsTypeWindowActive()
+{
+  return document.getElementById(typeWindowName).style.display != "none";
+}
+  
+function startBot()
+{
+  activeBot = true;
+}
+function stopBot()
+{
+  activeBot = false;
+}
+
+setOnLoadEvent();
